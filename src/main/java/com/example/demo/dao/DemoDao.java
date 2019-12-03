@@ -8,8 +8,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface DemoDao extends ElasticsearchRepository<DemoEntity,String> {
+
+    List<DemoEntity> findDemoEntitiesByContent(String content);
+
+    List<DemoEntity> findDemoEntitiesByContentOrTitle(String param);
+
+    List<DemoEntity> findByTitleStartingWith(String test);
 
 }

@@ -6,29 +6,26 @@ import org.springframework.data.elasticsearch.annotations.Document;
 
 /**
  * 加上了@Document注解之后，默认情况下这个实体中所有的属性都会被建立索引、并且分词
- *
  */
-@Document(indexName = "demoName", type = "demo")
+@Document(indexName = "demoname", type = "demo")
 public class DemoEntity {
     @Id
     private String id;
-
     private String title;
-
+    private String name;
     private String content;
-
-    private int userId;
-
-    private int weight;
+    private String desc;
+    private Integer age;
 
     @Override
     public String toString() {
         return "DemoEntity{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
+                ", name='" + name + '\'' +
                 ", content='" + content + '\'' +
-                ", userId=" + userId +
-                ", weight=" + weight +
+                ", desc='" + desc + '\'' +
+                ", age=" + age +
                 '}';
     }
 
@@ -48,6 +45,14 @@ public class DemoEntity {
         this.title = title;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getContent() {
         return content;
     }
@@ -56,19 +61,19 @@ public class DemoEntity {
         this.content = content;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getDesc() {
+        return desc;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 
-    public int getWeight() {
-        return weight;
+    public Integer getAge() {
+        return age;
     }
 
-    public void setWeight(int weight) {
-        this.weight = weight;
+    public void setAge(Integer age) {
+        this.age = age;
     }
 }
