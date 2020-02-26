@@ -1,6 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.dao.BlogDao;
 import com.example.demo.dao.DemoDao;
+import com.example.demo.entity.BlogEntity;
 import com.example.demo.entity.DemoEntity;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
@@ -10,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.http.HttpStatus;
@@ -27,6 +30,27 @@ public class DemoController {
 
     @Autowired
     private DemoDao demoDao;
+    @Autowired
+    private BlogDao blogDao;
+    @Autowired
+    private ElasticsearchTemplate template;
+    /**
+     * template
+     *
+     * @return
+     */
+    @RequestMapping("/template")
+    public ResponseEntity<Iterable> template() {
+
+        template.createIndex(DemoEntity.class);
+
+
+        List<DemoEntity> list = new ArrayList<>();
+        demoDao.saveAll(list);
+
+
+        return new ResponseEntity<>( HttpStatus.OK);
+    }
 
     /**
      * 插入数据，查询所有
@@ -35,17 +59,34 @@ public class DemoController {
      */
     @RequestMapping("/index")
     public ResponseEntity<Iterable> index() {
-//        for (int i = 0; i < 40; i++) {
+//        for (int i = 0; i < 10; i++) {
 //            DemoEntity post = new DemoEntity();
 //            post.setTitle(getTitle().get(i));
-//            post.setContent(getContent().get(i));
-//            post.setName(getName());
+//            post.setContent(getContent().get(i)+",demoname");
+//            post.setName(getName() );
 //            post.setDesc(getDesc());
 //            post.setAge((i&10)*2);
 //            demoDao.save(post);
 //        }
-        Iterable<DemoEntity> list = demoDao.findAll();
-        return new ResponseEntity<Iterable>(list, HttpStatus.OK);
+        List<BlogEntity> list = new ArrayList<>();
+        BlogEntity post1 = new BlogEntity();
+        post1.setId("0XSl6G4BWK5G0xRN_D67");
+        post1.setTitle("3" );
+        post1.setContent("3" );
+        post1.setAuthor("3");
+        list.add(post1);
+        BlogEntity post = new BlogEntity();
+        post.setId("0nSl6G4BWK5G0xRN_D67");
+        post.setTitle("4" );
+        post.setContent("4" );
+        post.setAuthor("4");
+        list.add(post);
+        blogDao.saveAll(list);
+
+
+        Iterable<BlogEntity> list1 = blogDao.findAll();
+
+        return new ResponseEntity<Iterable>(list1, HttpStatus.OK);
     }
 
     /**
@@ -87,6 +128,10 @@ public class DemoController {
     @GetMapping("/delete")
     public ResponseEntity<List<DemoEntity>> delete() {
         demoDao.deleteAll();
+
+        System.out.println("*****************");
+        blogDao.deleteAll();
+        System.out.println("===========");
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -102,9 +147,10 @@ public class DemoController {
         Sort sort =  Sort.by(Sort.Direction.ASC, "age");
         Pageable pageable = PageRequest.of(page, size, sort);
         // 分数、分页
-        QueryBuilder queryBuilder = QueryBuilders.matchQuery("name",query);
-        SearchQuery searchQuery = new NativeSearchQueryBuilder().withPageable(pageable).withQuery(queryBuilder).build();
+        QueryBuilder queryBuilder = QueryBuilders.matchQuery("content",query);
+        SearchQuery searchQuery = new NativeSearchQueryBuilder().withPageable(pageable).withQuery(queryBuilder).withIndices("demoname","blogname").build();
         Page<DemoEntity> searchPageResults = demoDao.search(searchQuery);
+
         return searchPageResults.getContent();
     }
 

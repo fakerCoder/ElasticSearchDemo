@@ -2,8 +2,6 @@ package com.example.demo.entity;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Field;
-import org.springframework.data.elasticsearch.annotations.FieldType;
 
 
 /**
@@ -23,28 +21,23 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 ik_max_word 会将文本做最细粒度的拆分。
 ik_smart 会做最粗粒度的拆分
  */
-@Document(indexName = "demoname", type = "demo", shards = 1, replicas = 0)
-public class DemoEntity {
+@Document(indexName = "blogname", type = "blog", shards = 1, replicas = 0)
+public class BlogEntity {
 
     @Id
     private String id;
     private String title;
-    private String name;
+    private String author;
     private String content;
-    // 这里配置了分词器，字段类型，可以不配置，默认也可
-    // @Field(analyzer = "ik_smart", type = FieldType.Text)
-    private String desc;
-    private Integer age;
+
 
     @Override
     public String toString() {
-        return "DemoEntity{" +
+        return "BlogEntity{" +
                 "id='" + id + '\'' +
                 ", title='" + title + '\'' +
-                ", name='" + name + '\'' +
+                ", author='" + author + '\'' +
                 ", content='" + content + '\'' +
-                ", desc='" + desc + '\'' +
-                ", age=" + age +
                 '}';
     }
 
@@ -64,12 +57,12 @@ public class DemoEntity {
         this.title = title;
     }
 
-    public String getName() {
-        return name;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     public String getContent() {
@@ -80,19 +73,5 @@ public class DemoEntity {
         this.content = content;
     }
 
-    public String getDesc() {
-        return desc;
-    }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
-    }
-
-    public Integer getAge() {
-        return age;
-    }
-
-    public void setAge(Integer age) {
-        this.age = age;
-    }
 }

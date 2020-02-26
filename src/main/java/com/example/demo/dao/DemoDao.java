@@ -15,8 +15,10 @@ public interface DemoDao extends ElasticsearchRepository<DemoEntity,String> {
 
     List<DemoEntity> findDemoEntitiesByContent(String content);
 
+
     List<DemoEntity> findDemoEntitiesByContentOrTitle(String param);
 
     List<DemoEntity> findByTitleStartingWith(String test);
+
 
 }
